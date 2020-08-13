@@ -14,7 +14,7 @@ from dataset import Nb101Dataset
 from model import NeuralPredictor
 from utils import AverageMeter, AverageMeterGroup, get_logger, reset_seed, to_cuda
 
-from scipy.stats import pearsonr, kendalltau
+from scipy.stats import kendalltau
 
 def accuracy_mse(predict, target, scale=100.):
     predict = Nb101Dataset.denormalize(predict.detach()) * scale
@@ -111,7 +111,7 @@ def main():
                 logger.info("Evaluation Step [%d/%d]  %s", step + 1, len(test_data_loader), meters)
     predict_ = np.concatenate(predict_)
     target_ = np.concatenate(target_)
-    logger.info(kendalltau(predict_, target_)) 
+    logger.info("Kendalltau: %.6f", kendalltau(predict_, target_)[0])
     if args.visualize:
         visualize_scatterplot(predict_, target_)
 
